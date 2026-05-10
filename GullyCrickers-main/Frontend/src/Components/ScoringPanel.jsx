@@ -120,7 +120,7 @@ function ScoringPanel({ matchId, token, setWinner, winner }) {
         data.message === "Innings completed. Start 2nd innings"
       ) {
 
-        alert(`1st Innings Over 🎯 Target: ${data.target}`);
+        alert(`1st Innings Over  Target: ${data.target}`);
 
         setInningsCompleted(true);
 

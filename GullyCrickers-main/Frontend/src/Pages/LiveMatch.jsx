@@ -128,7 +128,7 @@ socket.on("matchEnded", (data) => {
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 text-white p-6">
 
       <h1 className="text-3xl font-bold mb-6">
-        🏏 GullyCrickers Live Arena
+        GullyCrickers Live Arena
       </h1>
       <button
   onClick={() => {
@@ -141,7 +141,7 @@ socket.on("matchEnded", (data) => {
   className="bg-blue-500 px-5 py-2 rounded-xl hover:bg-blue-600 transition mb-6"
 >
 
-  🔗 Share Match Link
+   Share Match Link
 
 </button>
 
@@ -166,7 +166,7 @@ socket.on("matchEnded", (data) => {
 {matchData.target && (
 
   <p className="text-green-400 font-bold mt-2">
-    🎯 Target: {matchData.target}
+     Target: {matchData.target}
   </p>
 
 )}
