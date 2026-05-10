@@ -130,6 +130,20 @@ socket.on("matchEnded", (data) => {
       <h1 className="text-3xl font-bold mb-6">
         🏏 GullyCrickers Live Arena
       </h1>
+      <button
+  onClick={() => {
+
+    navigator.clipboard.writeText(window.location.href);
+
+    alert("Match link copied!");
+
+  }}
+  className="bg-blue-500 px-5 py-2 rounded-xl hover:bg-blue-600 transition mb-6"
+>
+
+  🔗 Share Match Link
+
+</button>
 
 
 
