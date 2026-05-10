@@ -410,6 +410,36 @@ const singleball = async(req,res)=>{
    // FIRST INNINGS COMPLETE
 let totalOvers = match.overs;
 
+// STOP IF OVERS ALREADY COMPLETED
+// if (
+//   curr_Inning.innings === 2 &&
+//   currentOver >= totalOvers
+// ) {
+
+//   curr_Inning.status = "completed";
+
+//   await curr_Inning.save();
+
+//   match.status = "completed";
+
+//   await match.save();
+
+//   const io = getIo();
+
+//   io.to(matchid).emit("matchEnded", {
+
+//     winner: match.teamAName
+
+//   });
+
+//   return res.status(400).json({
+
+//     message: "Match already completed"
+
+//   });
+
+// }
+
 if (
   curr_Inning.innings === 1 &&
   (
@@ -436,30 +466,32 @@ if (
 
 }
 
-    // SAVE NORMAL
-    await curr_Inning.save();
+    // // SAVE NORMAL
+    // await curr_Inning.save();
 
 
 
-    // SOCKET EMIT
-    const io = getIo();
+    // // SOCKET EMIT
+    // const io = getIo();
 
-    io.to(matchid).emit("scoreUpdate", {
+    // io.to(matchid).emit("scoreUpdate", {
 
-      totalRuns: curr_Inning.totalRuns,
+    //   totalRuns: curr_Inning.totalRuns,
 
-      wickets: curr_Inning.totalWickets,
+    //   wickets: curr_Inning.totalWickets,
 
-      over: curr_Inning.currentOver,
+    //   over: curr_Inning.currentOver,
 
-      ball: curr_Inning.ballInOver
+    //   ball: curr_Inning.ballInOver
 
-    });
+    // });
 
 
 
     // MATCH COMPLETE
-    // MATCH COMPLETE
+  // SECOND INNINGS COMPLETE
+
+// CHASING TEAM WON
 if (
   curr_Inning.innings === 2 &&
   total_run >= match.target
@@ -508,6 +540,80 @@ if (
 }
 
 
+
+// DEFENDING TEAM WON
+if (
+  curr_Inning.innings === 2 &&
+  (
+    currentOver >= totalOvers ||
+    totalWickets === 10
+  ) &&
+  total_run < match.target
+) {
+
+  curr_Inning.status = "completed";
+
+  await curr_Inning.save();
+
+  match.status = "completed";
+
+  await match.save();
+
+  const io = getIo();
+
+  let winnerTeam = match.teamAName;
+
+  io.to(matchid).emit("matchEnded", {
+
+    winner: winnerTeam
+
+  });
+
+  io.to(matchid).emit("scoreUpdate", {
+
+    totalRuns: curr_Inning.totalRuns,
+
+    wickets: curr_Inning.totalWickets,
+
+    over: curr_Inning.currentOver,
+
+    ball: curr_Inning.ballInOver
+
+  });
+
+  return res.status(201).json({
+
+    message:"Match completed",
+
+    winner: winnerTeam,
+
+    data:newball
+
+  });
+
+}
+
+ 
+
+// SAVE NORMAL
+await curr_Inning.save();
+
+
+
+// SOCKET EMIT
+const io = getIo();
+
+io.to(matchid).emit("scoreUpdate", {
+
+  totalRuns: curr_Inning.totalRuns,
+
+  wickets: curr_Inning.totalWickets,
+
+  over: curr_Inning.currentOver,
+
+  ball: curr_Inning.ballInOver
+
+});
 
     return res.status(201).json({
       message: "Ball recorded successfully",
