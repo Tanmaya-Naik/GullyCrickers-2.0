@@ -188,7 +188,7 @@ socket.on("matchEnded", (data) => {
       )}
 
 
-      //show curr innings
+      
       {currentInnings && (
 
   <p className="text-center text-2xl font-bold text-yellow-400 mb-4">
