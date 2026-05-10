@@ -407,31 +407,34 @@ const singleball = async(req,res)=>{
 
 
 
-    // FIRST INNINGS COMPLETE
-    let totalOvers = match.overs;
+   // FIRST INNINGS COMPLETE
+let totalOvers = match.overs;
 
-    if (currentOver >= totalOvers || totalWickets === 10) {
+if (
+  curr_Inning.innings === 1 &&
+  (
+    currentOver >= totalOvers ||
+    totalWickets === 10
+  )
+) {
 
-      if (curr_Inning.innings === 1) {
+  curr_Inning.status = "completed";
 
-        curr_Inning.status = "completed";
+  await curr_Inning.save();
 
-        await curr_Inning.save();
+  match.target = total_run + 1;
 
-        match.target = curr_Inning.totalRuns + 1;
+  await match.save();
 
-        await match.save();
+  return res.status(200).json({
 
-        return res.status(200).json({
-          message: "Innings completed. Start 2nd innings",
-          target: match.target
-        });
+    message: "Innings completed. Start 2nd innings",
 
-      }
+    target: match.target
 
-    }
+  });
 
-
+}
 
     // SAVE NORMAL
     await curr_Inning.save();
@@ -456,32 +459,53 @@ const singleball = async(req,res)=>{
 
 
     // MATCH COMPLETE
-    if (
-      curr_Inning.innings === 2 &&
-      total_run >= match.target
-    ) {
+    // MATCH COMPLETE
+if (
+  curr_Inning.innings === 2 &&
+  total_run >= match.target
+) {
 
-      curr_Inning.status = "completed";
+  curr_Inning.status = "completed";
 
-      await curr_Inning.save();
+  await curr_Inning.save();
 
-      match.status = "completed";
+  match.status = "completed";
 
-      await match.save();
+  await match.save();
 
-     let winnerTeam = match.teamBName;
+  const io = getIo();
 
-return res.status(201).json({
+  let winnerTeam = match.teamBName;
 
-  message:"Match completed",
+  io.to(matchid).emit("matchEnded", {
 
-  winner: winnerTeam,
+    winner: winnerTeam
 
-  data:newball
+  });
 
-});
+  io.to(matchid).emit("scoreUpdate", {
 
-    }
+    totalRuns: curr_Inning.totalRuns,
+
+    wickets: curr_Inning.totalWickets,
+
+    over: curr_Inning.currentOver,
+
+    ball: curr_Inning.ballInOver
+
+  });
+
+  return res.status(201).json({
+
+    message:"Match completed",
+
+    winner: winnerTeam,
+
+    data:newball
+
+  });
+
+}
 
 
 

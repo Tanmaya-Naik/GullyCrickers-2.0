@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { io } from "socket.io-client";
 
 import ScoringPanel from "../Components/ScoringPanel";
+import WinnerModal from "../Components/WinnerModal";
 
 const API = "http://localhost:5000/api";
 
@@ -15,6 +16,7 @@ function LiveMatch({ token }) {
   const [liveScore, setLiveScore] = useState(null);
 
   const [currentInnings, setCurrentInnings] = useState(null);
+  const [winner, setWinner] = useState("");
 
 
 
@@ -34,15 +36,23 @@ function LiveMatch({ token }) {
 
     socket.emit("joinMatch", id);
 
-    socket.on("scoreUpdate", (data) => {
+  socket.on("scoreUpdate", async (data) => {
 
-      console.log("LIVE:", data);
+  console.log("LIVE:", data);
 
-      setLiveScore(data);
+  setLiveScore(data);
 
-      fetchCurrentInnings();
+  await fetchCurrentInnings();
 
-    });
+  await fetchMatch();
+
+});
+
+socket.on("matchEnded", (data) => {
+
+  setWinner(data.winner);
+
+});
 
     return () => {
 
@@ -118,7 +128,7 @@ function LiveMatch({ token }) {
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 text-white p-6">
 
       <h1 className="text-3xl font-bold mb-6">
-        🏏 Live Match
+        🏏 GullyCrickers Live Arena
       </h1>
 
 
@@ -147,6 +157,20 @@ function LiveMatch({ token }) {
 
 )}
 
+{matchData.target && liveScore && (
+
+  <div className="mt-4 bg-red-500/20 border border-red-500 p-4 rounded-xl">
+
+    <p className="text-xl font-bold text-red-400">
+
+      Need {matchData.target - liveScore.totalRuns} Runs
+
+    </p>
+
+  </div>
+
+)}
+
             </div>
 
             <div className="text-right">
@@ -163,6 +187,19 @@ function LiveMatch({ token }) {
 
       )}
 
+
+      //show curr innings
+      {currentInnings && (
+
+  <p className="text-center text-2xl font-bold text-yellow-400 mb-4">
+
+    {currentInnings.innings === 1
+      ? "1st Innings"
+      : "2nd Innings"}
+
+  </p>
+
+)}
 
 
       {liveScore && (
@@ -264,12 +301,18 @@ function LiveMatch({ token }) {
       )}
 
 
+       <WinnerModal
+  winner={winner}
+  onClose={() => setWinner("")}
+/>
 
-      <ScoringPanel
-        matchId={id}
-        token={token}
-        matchData={matchData}
-      />
+
+   <ScoringPanel
+  matchId={id}
+  token={token}
+  setWinner={setWinner}
+  winner={winner}
+/>
 
     </div>
 

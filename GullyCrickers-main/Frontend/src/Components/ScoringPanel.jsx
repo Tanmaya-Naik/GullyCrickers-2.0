@@ -3,15 +3,21 @@ import { motion } from "framer-motion";
 
 const API = "http://localhost:5000/api/match";
 
-function ScoringPanel({ matchId, token }) {
+function ScoringPanel({ matchId, token, setWinner, winner }) {
 
   const [striker, setStriker] = useState("");
+
   const [nonStriker, setNonStriker] = useState("");
+
   const [bowler, setBowler] = useState("");
+
   const [newBatsman, setNewBatsman] = useState("");
-//innings started
+
   const [loading, setLoading] = useState(false);
+
   const [inningsStarted, setInningsStarted] = useState(false);
+
+  const [inningsCompleted, setInningsCompleted] = useState(false);
 
 
 
@@ -49,6 +55,8 @@ function ScoringPanel({ matchId, token }) {
       }
 
       setInningsStarted(true);
+
+      setInningsCompleted(false);
 
     }
 
@@ -114,6 +122,8 @@ function ScoringPanel({ matchId, token }) {
 
         alert(`1st Innings Over 🎯 Target: ${data.target}`);
 
+        setInningsCompleted(true);
+
         setInningsStarted(false);
 
       }
@@ -125,7 +135,7 @@ function ScoringPanel({ matchId, token }) {
         data.message === "Match completed"
       ) {
 
-        alert(`🎉 ${data.winner} WON THE MATCH`);
+        setWinner(data.winner);
 
       }
 
@@ -200,7 +210,7 @@ function ScoringPanel({ matchId, token }) {
 
 
       {/* SCORING CONTROLS */}
-      {inningsStarted && (
+      {inningsStarted && !inningsCompleted && !winner && (
 
         <motion.div
           initial={{ opacity: 0 }}
