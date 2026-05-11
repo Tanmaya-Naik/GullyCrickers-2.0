@@ -9,7 +9,12 @@ const { initSocket } = require("./socket")
 const app = express();
 const server = http.createServer(app);
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: "*",
+  credentials: true
+}));
+
+
 app.use(express.json());
 
 // const io = new Server(server, {
