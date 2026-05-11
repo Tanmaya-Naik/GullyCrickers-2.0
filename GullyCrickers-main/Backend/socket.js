@@ -21,6 +21,9 @@ const initSocket = (server) =>{
     return io;
 }
 
+
+
+
 const getIo = ()=>{
     if(!io){
         throw new Error("Socket.io is not initialize");

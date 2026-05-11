@@ -94,7 +94,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 
-const API = "http://localhost:5000/api";
+const API = "https://gullycrickers-2-0.onrender.com/api/match";
 
 function Auth({ onLogin }) {
   const [isLogin, setIsLogin] = useState(true);

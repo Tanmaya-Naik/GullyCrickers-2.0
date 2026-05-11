@@ -5,7 +5,7 @@ import { io } from "socket.io-client";
 import ScoringPanel from "../Components/ScoringPanel";
 import WinnerModal from "../Components/WinnerModal";
 
-const API = "http://localhost:5000/api";
+const API = "https://gullycrickers-2-0.onrender.com";
 
 function LiveMatch({ token }) {
 
@@ -32,7 +32,9 @@ function LiveMatch({ token }) {
 
   useEffect(() => {
 
-    const socket = io("http://localhost:5000");
+    const socket = io("https://gullycrickers-2-0.onrender.com", {
+  transports: ["websocket", "polling"]
+});
 
     socket.emit("joinMatch", id);
 
