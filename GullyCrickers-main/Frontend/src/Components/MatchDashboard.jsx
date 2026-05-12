@@ -2,7 +2,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 
-const API = "http://localhost:5000/api";
+const API = "https://gullycrickers-2-0.onrender.com/api";
 
 function MatchDashboard({ token, onLogout }) {
 
