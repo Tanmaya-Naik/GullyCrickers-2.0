@@ -19,11 +19,8 @@ function App() {
     setToken(null);
   };
 
-  if (!token) {
-    return <Auth onLogin={handleLogin} />;
-  }
-
   return (
+
     <BrowserRouter>
 
       <div className="min-h-screen bg-black text-white">
@@ -33,20 +30,20 @@ function App() {
           <Route
             path="/"
             element={
-              <MatchDashboard
-                token={token}
-                onLogout={handleLogout}
-              />
+              token ? (
+                <MatchDashboard
+                  token={token}
+                  onLogout={handleLogout}
+                />
+              ) : (
+                <Auth onLogin={handleLogin} />
+              )
             }
           />
 
           <Route
             path="/match/:id"
-            element={
-              <LiveMatch
-                token={token}
-              />
-            }
+            element={<LiveMatch />}
           />
 
           <Route
@@ -59,6 +56,7 @@ function App() {
       </div>
 
     </BrowserRouter>
+
   );
 }
 

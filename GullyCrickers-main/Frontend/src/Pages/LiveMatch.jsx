@@ -317,18 +317,21 @@ socket.on("matchEnded", (data) => {
       )}
 
 
-       <WinnerModal
+ <WinnerModal
   winner={winner}
   onClose={() => setWinner("")}
 />
 
+{token && (
 
-   <ScoringPanel
-  matchId={id}
-  token={token}
-  setWinner={setWinner}
-  winner={winner}
-/>
+  <ScoringPanel
+    matchId={id}
+    token={token}
+    setWinner={setWinner}
+    winner={winner}
+  />
+
+)}
 
     </div>
 
