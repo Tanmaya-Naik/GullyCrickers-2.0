@@ -5,7 +5,7 @@ import { io } from "socket.io-client";
 import ScoringPanel from "../Components/ScoringPanel";
 import WinnerModal from "../Components/WinnerModal";
 
-const API = "https://gullycrickers-2-0.onrender.com";
+const API = "https://gullycrickers-2-0.onrender.com/api";
 
 function LiveMatch({ token }) {
 
