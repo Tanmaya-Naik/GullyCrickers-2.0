@@ -42,9 +42,9 @@ function App() {
           />
 
           <Route
-            path="/match/:id"
-            element={<LiveMatch />}
-          />
+  path="/match/:id"
+  element={<LiveMatch token={token} />}
+/>
 
           <Route
             path="*"
